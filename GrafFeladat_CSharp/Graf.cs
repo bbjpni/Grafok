@@ -64,6 +64,56 @@ namespace GrafFeladat_CSharp
             elek.Add(new El(cs2, cs1));
         }
 
+        public void SzelessegiBejar(int kezdopont)
+        {
+            HashSet<int> bejart = new HashSet<int>();
+
+            // A következőnek vizsgált elem a kezdőpont
+            Queue<int> kovetkezok = new Queue<int>();
+            kovetkezok.Enqueue(kezdopont);
+            bejart.Add(kezdopont);
+
+            // Amíg van következő, addig megyünk
+            while (kovetkezok.Count != 0)
+            {
+                int k = kovetkezok.Dequeue();
+                Console.WriteLine(this.csucsok[k]);
+
+                foreach (var el in this.elek)
+                {
+                    if (el.Csucs1 == k && !bejart.Contains(el.Csucs2))
+                    {
+                        kovetkezok.Enqueue(el.Csucs2);
+                        bejart.Add(el.Csucs2);
+                    }
+                }
+            }
+        }
+
+        public void MelysegiBejar(int kezdopont)
+        {
+            HashSet<int> bejart = new HashSet<int>();
+
+            Stack<int> kovetkezok = new Stack<int>();
+            kovetkezok.Push(kezdopont);
+            bejart.Add(kezdopont);
+
+            while (kovetkezok.Count != 0)
+            {
+                int k = kovetkezok.Pop();
+                Console.WriteLine(this.csucsok[k]);
+
+                foreach (var el in this.elek)
+                {
+                    if (el.Csucs1 == k && !bejart.Contains(el.Csucs2))
+                    {
+                        kovetkezok.Push(el.Csucs2);
+                        bejart.Add(el.Csucs2);
+                    }
+                }
+            }
+        }
+
         public void Torles(int cs1, int cs2)
         {
             if (cs1 < 0 || cs1 >= csucsokSzama ||
