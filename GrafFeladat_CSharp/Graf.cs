@@ -123,7 +123,7 @@ namespace GrafFeladat_CSharp
             }
 
             // Ha már szerepel az él, akkor nem kell felvenni
-            for (int i = 0; i <= elek.Count; i+=2)
+            for (int i = 0; i <= elek.Count; i += 2)
             {
                 El el = elek[i];
                 if (el.Csucs1 == cs1 && el.Csucs2 == cs2 || el.Csucs1 == cs2 && el.Csucs2 == cs1)
@@ -149,6 +149,92 @@ namespace GrafFeladat_CSharp
                 str += el + "\n";
             }
             return str;
+        }
+
+        public bool Osszefuggo()
+        {
+            HashSet<int> bejart = new HashSet<int>();
+
+            // A következőnek vizsgált elem a kezdőpont
+            Queue<int> kovetkezok = new Queue<int>();
+            kovetkezok.Enqueue(0);
+            bejart.Add(0);
+
+            while (kovetkezok.Count != 0)
+            {
+                int k = kovetkezok.Dequeue();
+                Console.WriteLine(this.csucsok[k]);
+
+                foreach (var el in this.elek)
+                {
+                    if (el.Csucs1 == k && !bejart.Contains(el.Csucs2))
+                    {
+                        kovetkezok.Enqueue(el.Csucs2);
+                        bejart.Add(el.Csucs2);
+                    }
+                }
+            }
+            return csucsokSzama == bejart.Count;
+        }
+
+        //public Dictionary<int, int> MohoSzinezes()
+        //{
+        //    Dictionary<int, int> szinezes = new Dictionary<int, int>();
+        //    int maxSzín = this.csucsokSzama;
+
+        //    for (int aktualisCsucs = 0; aktualisCsucs < this.csucsokSzama; aktualisCsucs++)
+        //    {
+        //        HashSet<int> valaszthatoSzinek = new HashSet<int>();
+        //        valaszthatoSzinek.Add(aktualisCsucs);
+
+        //        foreach (var el in this.elek)
+        //        {
+        //            if (el.Csucs1 == aktualisCsucs)
+        //            {
+        //                if (szinezes.ContainsKey(el.Csucs2))
+        //                {
+        //                    int szin = szinezes[el.Csucs2];
+        //                    valaszthatoSzinek.Remove(szin);
+        //                }
+        //            }
+        //        }
+        //        int valasztottSzin = csucsokSzama+1;
+        //        foreach (var n in valaszthatoSzinek)
+        //        {
+        //            valasztottSzin = n < valasztottSzin ? n : valasztottSzin;
+        //            Console.WriteLine(n);                
+        //        }
+        //        szinezes.Add(aktualisCsucs, valasztottSzin);
+        //    }
+
+        //    return szinezes;
+
+
+        public Graf Feszitofa() {
+            Graf fa = new Graf(this.csucsokSzama);
+            HashSet<int> bejart = new HashSet<int>();
+            Queue<int> kovetkezok = new Queue<int>();
+
+            kovetkezok.Enqueue(0);
+            bejart.Add(0);
+
+            while (kovetkezok.Count != 0)
+            {
+                int aktualisCsucs = kovetkezok.Dequeue();
+                foreach (var el in this.elek)
+                {
+                    if (el.Csucs1 == aktualisCsucs)
+                    {
+                        if (!bejart.Contains(el.Csucs2))
+                        {
+                            bejart.Add(el.Csucs2);
+                            kovetkezok.Enqueue(el.Csucs2);
+                            fa.Hozzaad(el.Csucs1, el.Csucs2);
+                        }
+                    }
+                }
+            }
+            return fa;
         }
     }
 }
