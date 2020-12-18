@@ -19,7 +19,8 @@ namespace GrafFeladat_CSharp
             graf.Hozzaad(3, 4);
             graf.Hozzaad(4, 5);
             graf.Hozzaad(2, 4);
-
+            //graf.Torles(11, 2);
+            graf.Torles(2, 4);
             Console.WriteLine(graf);
             Console.ReadLine();
         }
